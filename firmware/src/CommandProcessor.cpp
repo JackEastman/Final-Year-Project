@@ -2,8 +2,8 @@
 #include "CommandProcessor.h"
 
 const char *words[] = {
-    "on",
-    "off",
+    "ON",
+    "OFF",
     "_nonsense",
 };
 
@@ -35,45 +35,25 @@ const int rightStop = 1500;
 
 void CommandProcessor::processCommand(uint16_t commandIndex)
 {
-    digitalWrite(GPIO_NUM_2, HIGH);
+    //digitalWrite(GPIO_NUM_2, HIGH);
     switch (commandIndex)
     {
-    case 0: // forward
-        ledcWrite(0, calcDuty(leftForward));
-        ledcWrite(1, calcDuty(rightForward));
+    case 0: // ON
+        digitalWrite(GPIO_NUM_21, LOW);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         break;
-    case 1: // backward
-        ledcWrite(0, calcDuty(leftBackward));
-        ledcWrite(1, calcDuty(rightBackward));
+    case 1: // OFF
+        digitalWrite(GPIO_NUM_21, HIGH);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         break;
-    /*case 2: // left
-        ledcWrite(0, calcDuty(leftBackward));
-        ledcWrite(1, calcDuty(rightForward));
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-        break;
-    case 3: // right
-        ledcWrite(0, calcDuty(leftForward));
-        ledcWrite(1, calcDuty(rightBackward));
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-        break;*/
     }
-    digitalWrite(GPIO_NUM_2, LOW);
-    ledcWrite(0, calcDuty(leftStop));  // stop
-    ledcWrite(1, calcDuty(rightStop)); // stop
+    //digitalWrite(GPIO_NUM_2, LOW);
 }
 
 CommandProcessor::CommandProcessor()
 {
     pinMode(GPIO_NUM_2, OUTPUT);
-    // setup the motors
-    ledcSetup(0, 50, 16);
-    ledcAttachPin(GPIO_NUM_13, 0);
-    ledcSetup(1, 50, 16);
-    ledcAttachPin(GPIO_NUM_12, 1);
-    ledcWrite(0, calcDuty(1500)); // left
-    ledcWrite(1, calcDuty(1500)); // right
+    pinMode(GPIO_NUM_21, OUTPUT);
 
     // allow up to 5 commands to be in flight at once
     m_command_queue_handle = xQueueCreate(5, sizeof(uint16_t));
