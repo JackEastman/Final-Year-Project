@@ -3,7 +3,7 @@
 #include <driver/i2s.h>
 #include <esp_task_wdt.h>
 #include "I2SMicSampler.h"
-#include "ADCSampler.h"
+//#include "ADCSampler.h"
 #include "config.h"
 #include "CommandDetector.h"
 #include "CommandProcessor.h"

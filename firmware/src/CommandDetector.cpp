@@ -24,7 +24,7 @@ CommandDetector::CommandDetector(I2SSampler *sample_provider, CommandProcessor *
     m_number_of_runs = 0;
     // Create our neural network
     m_nn = new NeuralNetwork();
-    Serial.println("Created Neral Net");
+    Serial.println("Created Neural Net");
     // create our audio processor
     m_audio_processor = new AudioProcessor(AUDIO_LENGTH, WINDOW_SIZE, STEP_SIZE, POOLING_SIZE);
     // clear down the window
