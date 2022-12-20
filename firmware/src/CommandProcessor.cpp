@@ -2,10 +2,8 @@
 #include "CommandProcessor.h"
 
 const char *words[] = {
-    "forward",
-    "backward",
-    "left",
-    "right",
+    "on",
+    "off",
     "_nonsense",
 };
 
@@ -50,7 +48,7 @@ void CommandProcessor::processCommand(uint16_t commandIndex)
         ledcWrite(1, calcDuty(rightBackward));
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         break;
-    case 2: // left
+    /*case 2: // left
         ledcWrite(0, calcDuty(leftBackward));
         ledcWrite(1, calcDuty(rightForward));
         vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -59,7 +57,7 @@ void CommandProcessor::processCommand(uint16_t commandIndex)
         ledcWrite(0, calcDuty(leftForward));
         ledcWrite(1, calcDuty(rightBackward));
         vTaskDelay(500 / portTICK_PERIOD_MS);
-        break;
+        break;*/
     }
     digitalWrite(GPIO_NUM_2, LOW);
     ledcWrite(0, calcDuty(leftStop));  // stop
@@ -91,7 +89,7 @@ CommandProcessor::CommandProcessor()
 void CommandProcessor::queueCommand(uint16_t commandIndex, float best_score)
 {
     // unsigned long now = millis();
-    if (commandIndex != 5 && commandIndex != -1)
+    if (commandIndex != 3 && commandIndex != -1)
     {
         Serial.printf("***** %ld Detected command %s(%f)\n", millis(), words[commandIndex], best_score);
         if (xQueueSendToBack(m_command_queue_handle, &commandIndex, 0) != pdTRUE)
