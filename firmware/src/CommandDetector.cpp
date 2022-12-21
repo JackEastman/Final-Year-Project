@@ -98,7 +98,7 @@ void CommandDetector::run()
     if (best_score > DETECTION_THRESHOLD && best_index != NUMBER_COMMANDS - 1 && start - m_last_detection > 1000)
     {
         m_last_detection = start;
-        m_command_processor->queueCommand(best_index, best_score);
+        m_command_processor->queueCommand(best_index, best_score, NUMBER_COMMANDS);
     }
     // compute the stats
     m_average_detect_time = (end - start) * 0.1 + m_average_detect_time * 0.9;

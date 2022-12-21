@@ -20,21 +20,9 @@ void commandQueueProcessorTask(void *param)
     }
 }
 
-int calcDuty(int ms)
-{
-    // 50Hz = 20ms period
-    return (65536 * ms) / 20000;
-}
-
-const int leftForward = 1600;
-const int leftBackward = 1400;
-const int leftStop = 1500;
-const int rightBackward = 1600;
-const int rightForward = 1445;
-const int rightStop = 1500;
-
 void CommandProcessor::processCommand(uint16_t commandIndex)
 {
+    //Serial.printf("EASTMAN's Log: Jump in processCommand\n");
     //digitalWrite(GPIO_NUM_2, HIGH);
     switch (commandIndex)
     {
@@ -52,6 +40,7 @@ void CommandProcessor::processCommand(uint16_t commandIndex)
 
 CommandProcessor::CommandProcessor()
 {
+    //Serial.printf("EASTMAN's Log: Jump in CommandProcessor\n");
     pinMode(GPIO_NUM_2, OUTPUT);
     pinMode(GPIO_NUM_21, OUTPUT);
 
@@ -66,10 +55,10 @@ CommandProcessor::CommandProcessor()
     xTaskCreate(commandQueueProcessorTask, "Command Queue Processor", 1024, this, 1, &command_queue_task_handle);
 }
 
-void CommandProcessor::queueCommand(uint16_t commandIndex, float best_score)
+void CommandProcessor::queueCommand(uint16_t commandIndex, float best_score, uint8_t numCommand)
 {
     // unsigned long now = millis();
-    if (commandIndex != 3 && commandIndex != -1)
+    if (commandIndex != numCommand && commandIndex != -1)
     {
         Serial.printf("***** %ld Detected command %s(%f)\n", millis(), words[commandIndex], best_score);
         if (xQueueSendToBack(m_command_queue_handle, &commandIndex, 0) != pdTRUE)

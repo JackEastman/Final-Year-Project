@@ -13,7 +13,7 @@ private:
 
 public:
     CommandProcessor();
-    void queueCommand(uint16_t commandIndex, float score);
+    void queueCommand(uint16_t commandIndex, float score, uint8_t numOfCommand);
     friend void commandQueueProcessorTask(void *param);
 };
 
