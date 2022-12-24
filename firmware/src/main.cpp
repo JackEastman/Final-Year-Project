@@ -3,9 +3,12 @@
 #include <driver/i2s.h>
 #include <esp_task_wdt.h>
 #include "I2SMicSampler.h"
+#include "I2SOutput.h"
 #include "config.h"
 #include "CommandDetector.h"
 #include "CommandProcessor.h"
+#include "SPIFFS.h"
+#include "Speaker.h"
 
 // i2s config for reading from both channels of I2S
 i2s_config_t i2sMemsConfigBothChannels = {
@@ -28,6 +31,13 @@ i2s_pin_config_t i2s_mic_pins = {
     .data_out_num = I2S_PIN_NO_CHANGE,
     .data_in_num = I2S_MIC_SERIAL_DATA};
 
+// i2s speaker pins
+i2s_pin_config_t i2s_speaker_pins = {
+    .bck_io_num = I2S_SPEAKER_SERIAL_CLOCK,
+    .ws_io_num = I2S_SPEAKER_LEFT_RIGHT_CLOCK,
+    .data_out_num = I2S_SPEAKER_SERIAL_DATA,
+    .data_in_num = I2S_PIN_NO_CHANGE};
+
 // This task does all the heavy lifting for our application
 void applicationTask(void *param)
 {
@@ -42,6 +52,7 @@ void applicationTask(void *param)
     {
       commandDetector->run();
     }
+    vTaskDelay(50);
   }
 }
 
@@ -51,6 +62,9 @@ void setup()
   delay(1000);
   Serial.println("Starting up");
 
+  // startup SPIFFS for the wav files
+  SPIFFS.begin();
+
   // make sure we don't get killed for our long running tasks
   esp_task_wdt_init(10, false);
 
@@ -59,8 +73,14 @@ void setup()
   // Direct i2s input from INMP441 or the SPH0645
   I2SSampler *i2s_sampler = new I2SMicSampler(i2s_mic_pins, false);
 #endif
+
+  // start the i2s speaker output
+  I2SOutput *i2s_output = new I2SOutput();
+  i2s_output->start(I2S_NUM_1, i2s_speaker_pins);
+  Speaker *speaker = new Speaker(i2s_output);
+
   // the command processor
-  CommandProcessor *command_processor = new CommandProcessor();
+  CommandProcessor *command_processor = new CommandProcessor(speaker);
 
   // create our application
   CommandDetector *commandDetector = new CommandDetector(i2s_sampler, command_processor);
