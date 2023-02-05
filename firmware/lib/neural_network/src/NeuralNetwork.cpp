@@ -86,7 +86,7 @@ NNResult NeuralNetwork::predict()
     // work out the "best output"
     float best_score = 0;
     int best_index = -1;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++) // value '3' is number of commands
     {
         float score = output->data.f[i];
         if (score > best_score)
