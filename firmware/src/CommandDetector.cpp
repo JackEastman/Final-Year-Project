@@ -50,6 +50,21 @@ CommandDetector::~CommandDetector()
     Serial.printf("Free ram after DetectWakeWord cleanup %d\n", free_ram);
 }
 
+bool CommandDetector::Skipper(){
+    // time how long this takes for stats
+    long start = millis();
+    // get access to the samples that have been read in
+    RingBufferAccessor *reader = m_sample_provider->getRingBufferReader();
+    // rewind by 1 second
+    reader->rewind(16000);
+    // get hold of the input buffer for the neural network so we can feed it data
+    float *input_buffer = m_nn->getInputBuffer();
+    // process the samples to get the spectrogram
+    bool is_valid = m_audio_processor->get_spectrogram(reader, input_buffer);
+    delete reader;
+    return is_valid;
+}
+
 void CommandDetector::run()
 {
     // time how long this takes for stats

@@ -28,6 +28,7 @@ public:
     CommandDetector(I2SSampler *sample_provider, CommandProcessor *command_processor );
     ~CommandDetector();
     void run();
+    bool Skipper();
 };
 
 #endif
