@@ -48,7 +48,7 @@ void applicationTask(void *param)
   {
     // wait for some audio samples to arrive
     uint32_t ulNotificationValue = ulTaskNotifyTake(pdTRUE, xMaxBlockTime);
-    if (ulNotificationValue > 0)
+    if (ulNotificationValue > 0 && commandDetector->Skipper())
     {
       commandDetector->run();
     }
