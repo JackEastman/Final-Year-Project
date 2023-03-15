@@ -5,7 +5,6 @@ class I2SSampler;
 class NeuralNetwork;
 class AudioProcessor;
 class CommandProcessor;
-class Speaker;
 
 #define NUMBER_COMMANDS 3
 #define COMMAND_WINDOW 3
@@ -17,7 +16,6 @@ private:
     I2SSampler *m_sample_provider;
     NeuralNetwork *m_nn;
     AudioProcessor *m_audio_processor;
-    Speaker *m_speaker;
     float m_average_detect_time;
     int m_number_of_runs;
     float m_scores[COMMAND_WINDOW][NUMBER_COMMANDS];

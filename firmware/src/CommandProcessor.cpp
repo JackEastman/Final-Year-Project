@@ -21,26 +21,6 @@ void commandQueueProcessorTask(void *param)
     }
 }
 
-void CommandProcessor::processCommand(uint16_t commandIndex)
-{
-    //digitalWrite(GPIO_NUM_2, HIGH);
-    switch (commandIndex)
-    {
-    case 0: // ON
-        digitalWrite(GPIO_NUM_21, LOW);
-        //m_speaker->playReady();
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        break;
-    case 1: // OFF
-        digitalWrite(GPIO_NUM_21, HIGH);
-        //m_speaker->playReady();
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        break;
-    }
-
-    //digitalWrite(GPIO_NUM_2, LOW);
-}
-
 CommandProcessor::CommandProcessor(Speaker *speaker)
 {
     m_speaker = speaker;
@@ -55,11 +35,34 @@ CommandProcessor::CommandProcessor(Speaker *speaker)
     }
     // kick off the command processor task
     TaskHandle_t command_queue_task_handle;
+    printf("EASTMAN: in %s line %d jump here\n", __FUNCTION__, __LINE__);
     xTaskCreate(commandQueueProcessorTask, "Command Queue Processor", 1024, this, 1, &command_queue_task_handle);
-    delete m_speaker;
-    m_speaker = NULL;
-    uint32_t free_ram = esp_get_free_heap_size();
-    Serial.printf("Free ram after playing notification %d\n", free_ram);
+    printf("EASTMAN: in %s line %d jump here\n", __FUNCTION__, __LINE__);
+    //uint32_t free_ram = esp_get_free_heap_size();
+    //Serial.printf("Free ram after playing notification %d\n", free_ram);
+}
+
+void CommandProcessor::processCommand(uint16_t commandIndex)
+{
+    //digitalWrite(GPIO_NUM_2, HIGH);
+    switch (commandIndex)
+    {
+    case 0: // ON
+        digitalWrite(GPIO_NUM_21, LOW);
+        //vTaskDelay(500 / portTICK_PERIOD_MS);
+        m_speaker->playOK();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        //delete m_speaker;
+        break;
+    case 1: // OFF
+        digitalWrite(GPIO_NUM_21, HIGH);
+        //vTaskDelay(500 / portTICK_PERIOD_MS);
+        m_speaker->playReady();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        //delete m_speaker;
+        break;
+    }
+    //digitalWrite(GPIO_NUM_2, LOW);
 }
 
 void CommandProcessor::queueCommand(uint16_t commandIndex, float best_score, uint8_t numCommand)

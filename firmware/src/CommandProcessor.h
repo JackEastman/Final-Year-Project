@@ -1,5 +1,5 @@
-#ifndef _intent_processor_h_
-#define _intent_processor_h_
+#ifndef _command_processor_h_
+#define _command_processor_h_
 
 #include <list>
 class Speaker;
