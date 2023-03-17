@@ -23,7 +23,7 @@ void commandQueueProcessorTask(void *param)
 
 CommandProcessor::CommandProcessor(Speaker *speaker)
 {
-    m_speaker = speaker;
+    m_speaker = *speaker;
     pinMode(GPIO_NUM_2, OUTPUT);
     pinMode(GPIO_NUM_21, OUTPUT);
 
