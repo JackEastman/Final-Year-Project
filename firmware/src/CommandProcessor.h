@@ -8,7 +8,7 @@ class CommandProcessor
 {
 private:
     QueueHandle_t m_command_queue_handle;
-    Speaker *m_speaker;
+    Speaker m_speaker;
     void processCommand(uint16_t commandIndex);
 
 public:
