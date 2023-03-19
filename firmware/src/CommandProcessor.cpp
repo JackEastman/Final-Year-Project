@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "CommandProcessor.h"
+#include "Speaker.h"
 
 const char *words[] = {
     "ON",
@@ -22,25 +23,27 @@ void commandQueueProcessorTask(void *param)
 
 void CommandProcessor::processCommand(uint16_t commandIndex)
 {
-    //Serial.printf("EASTMAN's Log: Jump in processCommand\n");
     //digitalWrite(GPIO_NUM_2, HIGH);
     switch (commandIndex)
     {
     case 0: // ON
         digitalWrite(GPIO_NUM_21, LOW);
+        //m_speaker->playReady();
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         break;
     case 1: // OFF
         digitalWrite(GPIO_NUM_21, HIGH);
+        //m_speaker->playReady();
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         break;
     }
+
     //digitalWrite(GPIO_NUM_2, LOW);
 }
 
-CommandProcessor::CommandProcessor()
+CommandProcessor::CommandProcessor(Speaker *speaker)
 {
-    //Serial.printf("EASTMAN's Log: Jump in CommandProcessor\n");
+    m_speaker = speaker;
     pinMode(GPIO_NUM_2, OUTPUT);
     pinMode(GPIO_NUM_21, OUTPUT);
 
@@ -53,6 +56,10 @@ CommandProcessor::CommandProcessor()
     // kick off the command processor task
     TaskHandle_t command_queue_task_handle;
     xTaskCreate(commandQueueProcessorTask, "Command Queue Processor", 1024, this, 1, &command_queue_task_handle);
+    delete m_speaker;
+    m_speaker = NULL;
+    uint32_t free_ram = esp_get_free_heap_size();
+    Serial.printf("Free ram after playing notification %d\n", free_ram);
 }
 
 void CommandProcessor::queueCommand(uint16_t commandIndex, float best_score, uint8_t numCommand)
