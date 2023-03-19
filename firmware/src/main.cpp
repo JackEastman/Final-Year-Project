@@ -42,6 +42,7 @@ void applicationTask(void *param)
     {
       commandDetector->run();
     }
+    vTaskDelay(50);
   }
 }
 
