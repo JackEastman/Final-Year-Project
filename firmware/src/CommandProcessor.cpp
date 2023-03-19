@@ -60,7 +60,7 @@ void CommandProcessor::queueCommand(uint16_t commandIndex, float best_score, uin
     // unsigned long now = millis();
     if (commandIndex != numCommand && commandIndex != -1)
     {
-        Serial.printf("***** %ld Detected command %s(%f)\n", millis(), words[commandIndex], best_score);
+        Serial.printf("***** %ld Detected command %s\n", millis(), words[commandIndex]);
         if (xQueueSendToBack(m_command_queue_handle, &commandIndex, 0) != pdTRUE)
         {
             Serial.println("No more space for command");

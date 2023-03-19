@@ -7,7 +7,7 @@ class AudioProcessor;
 class CommandProcessor;
 
 #define NUMBER_COMMANDS 3
-#define COMMAND_WINDOW 4
+#define COMMAND_WINDOW 3
 
 class CommandDetector
 {
