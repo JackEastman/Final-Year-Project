@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "CommandProcessor.h"
+#include "Speaker.h"
 
 const char *words[] = {
     "ON",
@@ -27,17 +28,23 @@ void CommandProcessor::processCommand(uint16_t commandIndex)
     {
     case 0: // ON
         digitalWrite(GPIO_NUM_21, LOW);
+        m_speaker->playOK();
+        vTaskDelay(2000);
         break;
     case 1: // OFF
         digitalWrite(GPIO_NUM_21, HIGH);
+        m_speaker->playReady();
+        vTaskDelay(2000);
         break;
     }
 
     //digitalWrite(GPIO_NUM_2, LOW);
 }
 
-CommandProcessor::CommandProcessor()
+CommandProcessor::CommandProcessor(Speaker *speaker)
 {
+    m_speaker = speaker;
+
     pinMode(GPIO_NUM_2, OUTPUT);
     pinMode(GPIO_NUM_21, OUTPUT);
 
