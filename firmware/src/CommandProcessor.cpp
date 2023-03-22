@@ -28,13 +28,15 @@ void CommandProcessor::processCommand(uint16_t commandIndex)
     {
     case 0: // ON
         digitalWrite(GPIO_NUM_21, LOW);
-        m_speaker->playOK();
-        vTaskDelay(2000);
+        vTaskDelay(300);
+        m_speaker->playReady();
+        //vTaskDelay(1000);
         break;
     case 1: // OFF
         digitalWrite(GPIO_NUM_21, HIGH);
+        vTaskDelay(300);
         m_speaker->playReady();
-        vTaskDelay(2000);
+        //vTaskDelay(1000);
         break;
     }
 

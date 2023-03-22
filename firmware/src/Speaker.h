@@ -8,10 +8,7 @@ class Speaker
 {
 private:
     WAVFileReader *m_ok;
-    WAVFileReader *m_cantdo;
-    WAVFileReader *m_ready_ping;
-    WAVFileReader *m_life;
-    WAVFileReader *m_jokes[5];
+    WAVFileReader *m_ready_ping[9];
 
     I2SOutput *m_i2s_output;
 
@@ -20,9 +17,6 @@ public:
     ~Speaker();
     void playOK();
     void playReady();
-    void playCantDo();
-    void playRandomJoke();
-    void playLife();
 };
 
 #endif
